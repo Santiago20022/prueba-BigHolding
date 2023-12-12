@@ -19,6 +19,8 @@ class TarjetaController extends Controller
         $tarjeta->descripcion = $request->descripcion;
         $tarjeta->id_estado = $request->id_estado;
         $tarjeta->id_usuario = $request->id_usuario;
+        $tarjeta->fecha_inicio = $request->fecha_inicio;
+        $tarjeta->fecha_fin = $request->fecha_fin;
         $tarjeta->save();
         return $tarjeta;
     }
@@ -41,8 +43,15 @@ class TarjetaController extends Controller
         $tarjeta->descripcion = $request->descripcion;
         $tarjeta->id_estado = $request->id_estado;
         $tarjeta->id_usuario = $request->id_usuario;
+        $tarjeta->fecha_inicio = $request->fecha_inicio;
+        $tarjeta->fecha_fin = $request->fecha_fin;
         $tarjeta->save();
         return $tarjeta;
+    }
+
+    public function getAllCards() {
+        $tarjetas = Tarjeta::with(['user', 'estado'])->get(); 
+        return $tarjetas;
     }
 
 }

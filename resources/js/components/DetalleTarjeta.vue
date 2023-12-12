@@ -42,6 +42,17 @@
                                     <option :value="estado.id" v-for="estado in estados" :selected="estado.id === tarjeta?.estado?.id">{{ estado.nombre }}</option>
                                   </select>
                             </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Fecha inicio</label>
+                                <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de inicio" v-model="fechaInicio">
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Fecha fin</label>
+                                <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de fin" v-model="fechaFin">
+                            </div>
+                            <div class="form-group">
+                                <span>{{calcularFechas() }}</span>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
@@ -76,6 +87,8 @@ export default {
             estado: '',
             comentarios: [],
             comentario: '',
+            fechaInicio: '',
+            fechaFin: '',
         }
     },
 
@@ -88,6 +101,8 @@ export default {
                 this.estado = this.tarjeta.estado.id
                 this.titulo = this.tarjeta.titulo
                 this.descripcion = this.tarjeta.descripcion
+                this.fechaInicio = this.tarjeta.fecha_inicio
+                this.fechaFin = this.tarjeta.fecha_fin
                 console.log(respuesta.data);
             } catch (error) {
                 console.log(error);
@@ -146,6 +161,22 @@ export default {
                 console.log(error);
             }
         },
+
+        calcularFechas() {
+            const fecha = new Date()
+            const fechaInicio = new Date(this.fechaInicio)
+            const fechaFin = new Date(this.fechaFin)
+            if(this.fechaFin) {
+                const diffTime = Math.abs(fechaFin - fecha);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return `Termino hace ${diffDays - 1} dias`
+            }else if(this.fechaInicio){
+                const diffTime = Math.abs(fecha - fechaInicio);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                return `Empezará en ${diffDays} dias`
+            }
+            return ''
+        }
     }
 }
 </script>

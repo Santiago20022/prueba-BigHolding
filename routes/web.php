@@ -6,6 +6,7 @@ use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\TarjetaController;
 use App\Http\Controllers\UserController;
 use App\http\Controllers\ComentarioController;
+use App\http\Controllers\ReporteController;
 
 
 /*
@@ -30,7 +31,7 @@ Route::get('/get/tarjetas/{estado_id}', [TarjetaController::class, 'getAll']);
 Route::get('/get/tarjeta/{id}', [TarjetaController::class, 'getById']);
 Route::post('/create/tarjeta', [TarjetaController::class, 'store']);
 Route::post('/edit/tarjeta/{tarjeta_id}', [TarjetaController::class, 'edit']);
-
+Route::get('/get/tarjetas', [TarjetaController::class, 'getAllCards']);
 
 Route::post('/create/comentario', [ComentarioController::class, 'store']);
 Route::get('/get/comentarios/{tarjeta_id}', [ComentarioController::class, 'getAll']);
@@ -42,4 +43,4 @@ Auth::routes();
 
 
 Route::get('/home', [TarjetaController::class, 'index'])->name('tarjeta');
-
+Route::get('/reporte', [ReporteController::class, 'index'])->name('reporte');

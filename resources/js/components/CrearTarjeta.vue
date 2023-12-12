@@ -12,7 +12,7 @@
                     <div class="modal-body">
                         <section>
                             <div class="form-group">
-                                <label for="formGroupExampleInput">Titulo </label>
+                                <label for="formGroupExampleInput">Titulo *</label>
                                 <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Titulo tarea" v-model="titulo">
                             </div>
                             <div class="form-group">
@@ -20,18 +20,26 @@
                                 <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Descripcion tarea" v-model="descripcion">
                             </div>
                             <div class="form-group">
-                                <label for="formGroupExampleInput2">Responsable</label>
+                                <label for="formGroupExampleInput2">Responsable *</label>
                                 <select class="form-select"  v-model="responsable">
                                     <option selected>Selecciona el responsable</option>
                                     <option :value="user.id" v-for="user in users">{{user.name}}</option>
                                   </select>
                             </div>
                             <div class="form-group">
-                                <label for="formGroupExampleInput2">Estado</label>
+                                <label for="formGroupExampleInput2">Estado *</label>
                                 <select class="form-select" v-model="estado">
                                     <option selected>Seleccione el estado</option>
                                     <option :value="estado.id" v-for="estado in estados">{{ estado.nombre }}</option>
                                   </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Fecha inicio</label>
+                                <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de inicio" v-model="fechaInicio">
+                            </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Fecha fin</label>
+                                <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de fin" v-model="fechaFin">
                             </div>
                         </section>
                     </div>
@@ -61,6 +69,8 @@ export default {
             descripcion: '',
             responsable: '',
             estado: '',
+            fechaInicio: '',
+            fechaFin: '',
         }
     },
     methods: {
@@ -86,7 +96,9 @@ export default {
                     titulo: this.titulo,
                     descripcion: this.descripcion,
                     id_estado: this.estado,
-                    id_usuario: this.responsable
+                    id_usuario: this.responsable,
+                    fecha_inicio: this.fechaInicio,
+                    fecha_fin: this.fechaFin,
                 })
                 this.handleClose(false)
             } catch (error) {

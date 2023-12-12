@@ -5,6 +5,7 @@
             <div class="d-flex gap-3">
                 <button @click="handleCrearEstadoModal(true)">Crear estado</button>
                 <button @click="handleCrearTarjetaModal(true)">Crear tarjeta</button>
+                <a href="/reporte">ir a reporte</a>
             </div>
         </section>
         <section class="h-100 border border-primary scroll p-3 d-flex flex-nowrap mw-100 gap-3">

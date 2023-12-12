@@ -18,6 +18,11 @@ return new class extends Migration
             $table->timestamps();
             //
         });
+        DB::table('estados')->insert([
+            ['nombre' => 'TO DO', 'descripcion' => 'Tareas por hacer'],
+            ['nombre' => 'In Progress', 'descripcion' => 'Tareas en progreso'],
+            ['nombre' => 'Done', 'descripcion' => 'Tareas realizadas'],
+        ]);
     }
 
     /**

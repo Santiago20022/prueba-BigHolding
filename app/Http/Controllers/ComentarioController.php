@@ -23,4 +23,5 @@ class ComentarioController extends Controller
         $comentarios = Comentario::with(['user', 'tarjeta'])->where('id_tarjeta', '=', $id)->get(); 
         return $comentarios;
     }
+
 }
