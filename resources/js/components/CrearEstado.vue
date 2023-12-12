@@ -13,17 +13,17 @@
                         <section>
                             <div class="form-group">
                                 <label for="formGroupExampleInput">Nombre</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="In Progress" v-model="nombre">
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Descripcion</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Descripcion" v-model="descripcion">
                             </div>
                         </section>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Close</button>
+                        <button type="button" class="btn btn-primary" @click="saveEstado">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -35,10 +35,28 @@
 <script>
 export default {
     props: ['isopen' , 'handleClose'],
-    created() {
-        console.log('entre');
+    data() {
+        return {
+            nombre: '',
+            descripcion: '',
+        }
+    },
+    methods: {
+        async saveEstado() {
+            try {
+                const respuesta = await axios.post('/create/estado', {
+                    nombre: this.nombre,
+                    descripcion: this.descripcion
+                })
+                this.handleClose(false)
+            } catch (error) {
+                console.log(error);
+            }
+        },
     }
 }
+
+
 </script>
 <style scoped>
 .custom-modal{
