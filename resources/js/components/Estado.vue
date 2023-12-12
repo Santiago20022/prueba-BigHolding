@@ -14,7 +14,7 @@
 <script>
 import Tarjeta from './Tarjeta.vue';
 export default {
-    props: ['handleModal', 'estado', 'getTarjetas', 'tarjetas'],
+    props: ['handleModal', 'estado', 'getTarjetas', 'trigger', 'setTrigger'],
     components: {
         Tarjeta,
     },
@@ -27,6 +27,14 @@ export default {
             
         }
     },
+    watch:{
+        async trigger(newTrigger, oldTrigger){
+            if (newTrigger){
+                this.tarjetas = await this.getTarjetas(this.estado.id)
+                this.setTrigger(false)
+            }
+        }
+    }
 }
 </script>
 

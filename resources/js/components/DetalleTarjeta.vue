@@ -4,7 +4,7 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content d-flex flex-column gap-3">
                     <div class="modal-header d-flex gap-3 pb-3 border-bottom">
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" v-model="titulo">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -13,29 +13,40 @@
                         <div class="d-flex flex-column gap-3 w-100">
                             <div class="custom-height p-3 d-flex flex-column">
                                 <h4>Descripcion</h4>
-                                <textarea></textarea>
+                                <textarea v-model="descripcion"></textarea>
                             </div>
-                            <div class="custom-height p-3">
+                            <div class="custom-height p-3 d-flex flex-column">
                                 <h4>Comentarios</h4>
+                                <div class="d-flex flex-column scroll">
+                                    <div class="d-flex gap-3" v-for="comentario in comentarios">
+                                        <span>{{ comentario.user.name }}</span>
+                                        <p>{{ comentario.comentario }}</p>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                            <div class="d-flex gap-3">
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" v-model="comentario">
+                                <button type="button" class="btn btn-primary" @click="saveComentario">Comentar</button>
                             </div>
                         </div>
                         <div class="d-flex flex-column gap-3">
                             <div class="d-flex flex-column ">
                                 <h3>Responsable</h3>
-                                <span>Santiago</span>
+                                <select class="form-select"  v-model="responsable">
+                                    <option :value="user.id" v-for="user in users" :selected="user.id === tarjeta?.user?.id">{{user.name}}</option>
+                                  </select>
                             </div>
                             <div class="d-flex flex-column ">
                                 <h3>Estado</h3>
-                                <span>In progress</span>
+                                <select class="form-select" v-model="estado">
+                                    <option :value="estado.id" v-for="estado in estados" :selected="estado.id === tarjeta?.estado?.id">{{ estado.nombre }}</option>
+                                  </select>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Close</button>
+                        <button type="button" class="btn btn-primary" @click="editTarjeta">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -46,8 +57,95 @@
 
 <script>
 export default {
-    props: ['isopen' , 'handleClose'],
-    created() {
+    props: ['isopen' , 'handleClose', 'tarjetaId'],
+    async created() {
+        await this.getTarjeta()
+        await this.getUsuarios()
+        await this.getEstados()
+        await this.getComentarios()
+    },
+
+    data() {
+        return {
+            tarjeta: null,
+            users: [],
+            estados: [],
+            titulo: '',
+            descripcion: '',
+            responsable: '',
+            estado: '',
+            comentarios: [],
+            comentario: '',
+        }
+    },
+
+    methods: {
+        async getTarjeta() {
+            try {
+                const respuesta = await axios.get(`/get/tarjeta/${this.tarjetaId}`)
+                this.tarjeta =respuesta.data 
+                this.responsable = this.tarjeta.user.id
+                this.estado = this.tarjeta.estado.id
+                this.titulo = this.tarjeta.titulo
+                this.descripcion = this.tarjeta.descripcion
+                console.log(respuesta.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+
+        async getUsuarios() {
+            try {
+                const respuesta = await axios.get('/get/users')
+                this.users = respuesta.data 
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+        async getEstados() {
+            try {
+                const respuesta = await axios.get('/get/estados')
+                this.estados = respuesta.data 
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+
+        async saveComentario() {
+            try {
+                const respuesta = await axios.post('/create/comentario', {
+                    id_tarjeta: this.tarjetaId,
+                    comentario: this.comentario,
+                })
+                await this.getComentarios()
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+
+        async getComentarios() {
+            try {
+                const respuesta = await axios.get(`/get/comentarios/${this.tarjetaId}`)
+                this.comentarios =respuesta.data 
+                console.log(respuesta.data);
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+
+        async editTarjeta() {
+            try {
+                const respuesta = await axios.post(`/edit/tarjeta/${this.tarjetaId}`, {
+                    titulo: this.titulo,
+                    descripcion: this.descripcion,
+                    id_estado: this.estado,
+                    id_usuario: this.responsable
+                })
+                this.handleClose(false, this.tarjetaId, true)
+            } catch (error) {
+                console.log(error);
+            }
+        },
     }
 }
 </script>
@@ -74,5 +172,10 @@ export default {
     height: 100%;
     overflow-y: auto;
     resize: none;
+}
+
+.scroll{
+    overflow-y: auto;
+    height: 100%;
 }
 </style>

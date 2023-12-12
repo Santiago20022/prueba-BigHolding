@@ -29,4 +29,20 @@ class TarjetaController extends Controller
         return $tarjetas;
     }
 
+    public function getById (string $id) {
+        $tarjeta = Tarjeta::with(['user', 'estado'])->where('id', '=', $id)->get();
+        return $tarjeta[0]; 
+    }
+
+    
+    public function edit(string $id, Request $request){
+        $tarjeta = Tarjeta::find($id);
+        $tarjeta->titulo = $request->titulo;
+        $tarjeta->descripcion = $request->descripcion;
+        $tarjeta->id_estado = $request->id_estado;
+        $tarjeta->id_usuario = $request->id_usuario;
+        $tarjeta->save();
+        return $tarjeta;
+    }
+
 }

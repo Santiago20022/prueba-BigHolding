@@ -9,12 +9,12 @@
         </section>
         <section class="h-100 border border-primary scroll p-3 d-flex flex-nowrap mw-100 gap-3">
             <template v-for="estado in estados">
-                <estado :handleModal="handleDetalleTarjetaModal" :estado="estado" :getTarjetas="getTarjetas"></estado>
+                <estado :handleModal="handleDetalleTarjetaModal" :estado="estado" :getTarjetas="getTarjetas" :trigger="trigger" :setTrigger="setTrigger"></estado>
             </template>
         </section> 
         <crear-estado :isopen="crearEstadoOpen" :handleClose="handleCrearEstadoModal" v-if="crearEstadoOpen"></crear-estado>
         <crear-tarjeta :isopen="crearTarjetaOpen" :handleClose="handleCrearTarjetaModal" v-if="crearTarjetaOpen"></crear-Tarjeta>
-        <detalle-tarjeta :isopen="detalleTarjetaOpen" :handleClose="handleDetalleTarjetaModal" v-if="detalleTarjetaOpen"></detalle-Tarjeta>
+        <detalle-tarjeta :isopen="detalleTarjetaOpen" :handleClose="handleDetalleTarjetaModal" v-if="detalleTarjetaOpen" :tarjetaId="tarjetaId"></detalle-Tarjeta>
 
     </div>
 </template>
@@ -40,6 +40,8 @@ export default {
             crearEstadoOpen: false,
             crearTarjetaOpen: false,
             detalleTarjetaOpen: false,
+            tarjetaId: '',
+            trigger: false,
         }
     },
     async created() {
@@ -50,16 +52,6 @@ export default {
             try {
                 const respuesta = await axios.get('/get/estados')
                 this.estados = respuesta.data 
-            } catch (error) {
-                console.log(error);
-            }
-        }, 
-        async saveTarjeta() {
-            try {
-                const respuesta = await axios.post('/create/tarjeta', {
-                    titulo: "Sin Asignar",
-                    descripcion: "Descripcion sin asignar"
-                })
             } catch (error) {
                 console.log(error);
             }
@@ -78,9 +70,10 @@ export default {
             }
             this.crearTarjetaOpen = isopen
         },
-        handleDetalleTarjetaModal(isopen) {
+        handleDetalleTarjetaModal(isopen, tarjetaId, retrigger = false) {
+            this.tarjetaId = tarjetaId
             this.detalleTarjetaOpen = isopen
-
+            this.trigger = retrigger
         },
         async getTarjetas(estadoId) {
             try {
@@ -90,6 +83,9 @@ export default {
                 console.log(error);
             }
         }, 
+        setTrigger(trigger) {
+            this.trigger = trigger
+        }
         
 
     }

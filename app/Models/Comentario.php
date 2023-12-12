@@ -11,9 +11,9 @@ class Comentario extends Model
 {
     use HasFactory;
     public function tarjeta(){
-        return $this->belongsTo(Tarjeta::class);
+        return $this->belongsTo(Tarjeta::class, 'id_tarjeta');
     }
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_usuario');
     }
 }

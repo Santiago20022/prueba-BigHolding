@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column custom-size border border-primary p-3" @click="handleModal(true)">
+    <div class="d-flex flex-column custom-size border border-primary p-3" @click="handleModal(true, tarjeta.id)">
         <div class="d-flex justify-content-between">
             <div>
                {{ tarjeta.titulo }}
@@ -23,6 +23,8 @@
 
 export default {
     props: ['handleModal', 'tarjeta'],
+
+    
 }
 </script>
 <style scoped>

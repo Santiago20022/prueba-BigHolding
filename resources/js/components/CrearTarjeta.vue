@@ -60,7 +60,7 @@ export default {
             titulo: '',
             descripcion: '',
             responsable: '',
-            estado: ''
+            estado: '',
         }
     },
     methods: {
