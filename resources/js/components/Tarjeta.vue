@@ -2,19 +2,19 @@
     <div class="d-flex flex-column custom-size border border-primary p-3" @click="handleModal(true)">
         <div class="d-flex justify-content-between">
             <div>
-                title
+               {{ tarjeta.titulo }}
             </div>
             <div class="d-flex flex-column gap-3">
                 <div>
-                    estado
+                    {{ tarjeta.estado.nombre }}
                 </div>
                 <div>
-                    responsable
+                    {{ tarjeta.user.name}}
                 </div>
             </div>
         </div>
         <div>
-            descripcion
+            {{ tarjeta.descripcion }}
         </div>
     </div>
 </template>
@@ -22,7 +22,7 @@
 <script>
 
 export default {
-    props: ['handleModal'],
+    props: ['handleModal', 'tarjeta'],
 }
 </script>
 <style scoped>

@@ -8,7 +8,9 @@
             </div>
         </section>
         <section class="h-100 border border-primary scroll p-3 d-flex flex-nowrap mw-100 gap-3">
-            <estado :handleModal="handleDetalleTarjetaModal"></estado>
+            <template v-for="estado in estados">
+                <estado :handleModal="handleDetalleTarjetaModal" :estado="estado" :getTarjetas="getTarjetas"></estado>
+            </template>
         </section> 
         <crear-estado :isopen="crearEstadoOpen" :handleClose="handleCrearEstadoModal" v-if="crearEstadoOpen"></crear-estado>
         <crear-tarjeta :isopen="crearTarjetaOpen" :handleClose="handleCrearTarjetaModal" v-if="crearTarjetaOpen"></crear-Tarjeta>
@@ -38,17 +40,16 @@ export default {
             crearEstadoOpen: false,
             crearTarjetaOpen: false,
             detalleTarjetaOpen: false,
-
         }
-
+    },
+    async created() {
+        await this.getEstados()
     },
     methods: {
-        async saveEstado() {
+        async getEstados() {
             try {
-                const respuesta = await axios.post('/create/estado', {
-                    nombre: "Sin Asignar",
-                    descripcion: "Descripcion sin asignar"
-                })
+                const respuesta = await axios.get('/get/estados')
+                this.estados = respuesta.data 
             } catch (error) {
                 console.log(error);
             }
@@ -64,20 +65,32 @@ export default {
             }
         }, 
         handleCrearEstadoModal(isopen) {
-            console.log(isopen);
+            if(!isopen){
+                this.getEstados()
+            }
             this.crearEstadoOpen = isopen
             
         },
         handleCrearTarjetaModal(isopen) {
-            console.log(isopen);
+            if(!isopen){
+                this.estados = []
+                this.getEstados()
+            }
             this.crearTarjetaOpen = isopen
-
         },
         handleDetalleTarjetaModal(isopen) {
-            console.log(isopen);
             this.detalleTarjetaOpen = isopen
 
-        }
+        },
+        async getTarjetas(estadoId) {
+            try {
+                const respuesta = await axios.get(`/get/tarjetas/${estadoId}`)
+                return respuesta.data 
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+        
 
     }
     

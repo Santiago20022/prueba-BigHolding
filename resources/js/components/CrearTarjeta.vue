@@ -13,35 +13,31 @@
                         <section>
                             <div class="form-group">
                                 <label for="formGroupExampleInput">Titulo </label>
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input">
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Titulo tarea" v-model="titulo">
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Descripcion</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Another input">
+                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Descripcion tarea" v-model="descripcion">
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Responsable</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                  </select>>
+                                <select class="form-select"  v-model="responsable">
+                                    <option selected>Selecciona el responsable</option>
+                                    <option :value="user.id" v-for="user in users">{{user.name}}</option>
+                                  </select>
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Estado</label>
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select class="form-select" v-model="estado">
+                                    <option selected>Seleccione el estado</option>
+                                    <option :value="estado.id" v-for="estado in estados">{{ estado.nombre }}</option>
                                   </select>
                             </div>
                         </section>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-primary">Save changes</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Close</button>
+                        <button type="button" class="btn btn-primary" @click="saveTarjeta">Guardar</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Cerrar</button>
                     </div>
                 </div>
             </div>
@@ -53,9 +49,52 @@
 <script>
 export default {
     props: ['isopen' , 'handleClose'],
-    created() {
-        console.log('entre');
-    }
+    async created() {
+        await this.getUsuarios()
+        await this.getEstados()
+    },
+    data() {
+        return {
+            users: [],
+            estados: [],
+            titulo: '',
+            descripcion: '',
+            responsable: '',
+            estado: ''
+        }
+    },
+    methods: {
+        async getUsuarios() {
+            try {
+                const respuesta = await axios.get('/get/users')
+                this.users = respuesta.data 
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+        async getEstados() {
+            try {
+                const respuesta = await axios.get('/get/estados')
+                this.estados = respuesta.data 
+            } catch (error) {
+                console.log(error);
+            }
+        }, 
+        async saveTarjeta() {
+            try {
+                const respuesta = await axios.post('/create/tarjeta', {
+                    titulo: this.titulo,
+                    descripcion: this.descripcion,
+                    id_estado: this.estado,
+                    id_usuario: this.responsable
+                })
+                this.handleClose(false)
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        
+    }   
 }
 </script>
 <style scoped>

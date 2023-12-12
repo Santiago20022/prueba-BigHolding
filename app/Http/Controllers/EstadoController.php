@@ -16,4 +16,9 @@ class EstadoController extends Controller
         return $estado;
 
     }
+
+    public function getAll() {
+        $estados = Estado::all();
+        return $estados;
+    }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\EstadoController;
 use App\Http\Controllers\TarjetaController;
+use App\Http\Controllers\UserController;
 
 
 /*
@@ -20,6 +21,13 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index']);
 Route::post('/create/estado', [EstadoController::class, 'store']);
+Route::get('/get/estados', [EstadoController::class, 'getAll']);
+
+Route::get('/get/tarjetas/{estado_id}', [TarjetaController::class, 'getAll']);
+Route::post('/create/tarjeta', [TarjetaController::class, 'store']);
+
+Route::get('/get/users', [UserController::class, 'getAll']);
 Auth::routes();
 
 Route::get('/home', [TarjetaController::class, 'index'])->name('tarjeta');
+

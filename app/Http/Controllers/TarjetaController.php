@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Tarjeta;
+use App\Models\Estado;
 
 class TarjetaController extends Controller
 {
@@ -13,11 +15,18 @@ class TarjetaController extends Controller
 
     public function store(Request $request ) {
         $tarjeta = new Tarjeta();
-        $tarjeta->Titulo=$request->get('Titulo');
-        $tarjeta->Descripcion=$request->get('Descripcion');
-        $tarjeta->id_estado=$Estado->id;
-        $tarjeta->id_estado=$Estado->id;
+        $tarjeta->titulo = $request->titulo;
+        $tarjeta->descripcion = $request->descripcion;
+        $tarjeta->id_estado = $request->id_estado;
+        $tarjeta->id_usuario = $request->id_usuario;
         $tarjeta->save();
         return $tarjeta;
     }
+
+    public function getAll(string $id){
+        //dd($id);
+        $tarjetas = Tarjeta::with(['user', 'estado'])->where('id_estado', '=', $id)->get(); 
+        return $tarjetas;
+    }
+
 }

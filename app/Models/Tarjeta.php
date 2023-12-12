@@ -17,10 +17,10 @@ class Tarjeta extends Model
 
 
     public function estado(){
-        return $this->belongsTo(Estado::class);
+        return $this->belongsTo(Estado::class, 'id_estado');
     }
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_usuario');
     }
 
 
