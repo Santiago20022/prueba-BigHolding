@@ -13,11 +13,21 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        .body{
+            display: flex;
+            flex-flow: column;
+            height: 100%;
+        }
+        .main-content{
+            flex: 1 1 auto;
+        }
+    </style>
 
     <!-- Scripts -->
 </head>
-<body>
-    <div id="app">
+<body class="vh-100">
+    <div id="app" class="body">
        
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -73,7 +83,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main class="py-4 main-content">
             @yield('content')
         </main>
     </div>

@@ -13,7 +13,7 @@ class EstadoController extends Controller
         $estado->nombre = $request->nombre;
         $estado->descripcion = $request->descripcion;
         $estado->save();
-        return response()->json($estado);
+        return $estado;
 
     }
 }
