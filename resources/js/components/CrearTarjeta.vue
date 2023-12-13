@@ -1,11 +1,11 @@
 <template>
     <div class="custom-modal d-flex justify-content-center align-items-center" >
-        <div class="w-50 bg-white p-3">
+        <div class="w-50 bg-white p-4 rounded">
             <div class="modal-dialog" role="document">
                 <div class="modal-content d-flex flex-column gap-3">
                     <div class="modal-header">
                         <h5 class="modal-title">Crear tarjeta</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
+                        <button type="button" class="close btn btn-secondary" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -17,7 +17,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Descripcion</label>
-                                <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Descripcion tarea" v-model="descripcion">
+                                <textarea class="form-control" id="formGroupExampleInput2" v-model="descripcion"></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="formGroupExampleInput2">Responsable *</label>
@@ -41,10 +41,14 @@
                                 <label for="formGroupExampleInput2">Fecha fin</label>
                                 <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de fin" v-model="fechaFin">
                             </div>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput2">Fecha fin</label>
+                                <input type="file" class="form-control" id="formGroupExampleInput2" placeholder="Selecciona archivo" @change="handleArchivo">
+                            </div>
                         </section>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-primary" @click="saveTarjeta">Guardar</button>
+                        <button type="button" class="btn btn-primary" @click="saveTarjeta" :disabled="validarCampos()">Guardar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Cerrar</button>
                     </div>
                 </div>
@@ -71,6 +75,7 @@ export default {
             estado: '',
             fechaInicio: '',
             fechaFin: '',
+            archivo: null,
         }
     },
     methods: {
@@ -92,19 +97,35 @@ export default {
         }, 
         async saveTarjeta() {
             try {
-                const respuesta = await axios.post('/create/tarjeta', {
-                    titulo: this.titulo,
-                    descripcion: this.descripcion,
-                    id_estado: this.estado,
-                    id_usuario: this.responsable,
-                    fecha_inicio: this.fechaInicio,
-                    fecha_fin: this.fechaFin,
-                })
+                const config = {
+                    headers : { "Content-Type" : "multipart/form-data"}
+                }
+                const data = new FormData()
+                data.append('titulo', this.titulo)
+                data.append('descripcion', this.descripcion)
+                data.append('id_usuario', this.responsable)
+                data.append('fecha_inicio',this.fechaInicio)
+                data.append('fecha_fin',this.fechaFin)
+                data.append('id_estado', this.estado)
+                data.append('file', this.archivo)
+
+                const respuesta = await axios.post('/create/tarjeta', data, config)
                 this.handleClose(false)
             } catch (error) {
                 console.log(error);
             }
         },
+
+        validarCampos() {
+            if(!this.titulo || !this.descripcion || !this.responsable || !this.estado){
+                return true
+            }
+            return false
+        },
+        handleArchivo(e) {
+            this.archivo = e.target.files[0]
+        }
+
         
     }   
 }
@@ -118,5 +139,9 @@ export default {
     z-index: 1000;
     top: 0;
     left: 0;
+}
+
+textarea{
+    resize: none;
 }
 </style>

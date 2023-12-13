@@ -1,9 +1,12 @@
 <template>
-    <div class="custom-size d-flex flex-column  h-100">
-        <div>{{ estado.nombre }}</div>
-        <div class="border border-primary h-100 p-3 scroll d-flex flex-column gap-3">
+    <div class=" d-flex flex-column  gap-3 custom-size custom-flex">
+        <h4>{{ estado.nombre }}</h4>
+        <div class="border border-secondary p-3 scroll d-flex flex-column gap-3 rounded custom-flex ">
+            <template v-if="!tarjetas.length">
+                <span>No hay tarjetas creadas para este estado</span>
+            </template>
             <template v-for="tarjeta in tarjetas">
-                <tarjeta :handleModal="handleModal" :tarjeta="tarjeta"></tarjeta>
+                <tarjeta :handleModal="handleModal" :tarjeta="tarjeta" :trigger="trigger" :setTrigger="setTrigger"></tarjeta>
             </template>
             
         </div>
@@ -47,4 +50,10 @@ export default {
 .scroll{
     overflow-y: auto;
 }
+
+.custom-flex{
+    flex: 1 ;
+}
+
+
 </style>

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('titulo');
             $table->string('descripcion');
+            $table->string('archivo')->nullable();
             $table->unsignedBigInteger('id_estado');
             $table->unsignedBigInteger('id_usuario');
             $table->timestamps();

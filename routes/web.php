@@ -23,7 +23,7 @@ use App\http\Controllers\ReporteController;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index']);
+
 Route::post('/create/estado', [EstadoController::class, 'store']);
 Route::get('/get/estados', [EstadoController::class, 'getAll']);
 
@@ -32,6 +32,7 @@ Route::get('/get/tarjeta/{id}', [TarjetaController::class, 'getById']);
 Route::post('/create/tarjeta', [TarjetaController::class, 'store']);
 Route::post('/edit/tarjeta/{tarjeta_id}', [TarjetaController::class, 'edit']);
 Route::get('/get/tarjetas', [TarjetaController::class, 'getAllCards']);
+Route::post('/delete/tarjeta/{id}', [TarjetaController::class, 'destroy']);
 
 Route::post('/create/comentario', [ComentarioController::class, 'store']);
 Route::get('/get/comentarios/{tarjeta_id}', [ComentarioController::class, 'getAll']);
@@ -42,5 +43,6 @@ Auth::routes();
 
 
 
-Route::get('/home', [TarjetaController::class, 'index'])->name('tarjeta');
-Route::get('/reporte', [ReporteController::class, 'index'])->name('reporte');
+Route::get('/', [TarjetaController::class, 'index'])->name('tarjeta')->middleware('auth');
+Route::get('/home', [TarjetaController::class, 'index'])->name('tarjeta')->middleware('auth');
+Route::get('/reporte', [ReporteController::class, 'index'])->name('reporte')->middleware('auth');

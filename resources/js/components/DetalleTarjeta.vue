@@ -1,62 +1,67 @@
 <template>
-    <div class="custom-modal d-flex justify-content-center align-items-center" >
-        <div class="w-75 bg-white p-3">
+    <div class="custom-modal d-flex justify-content-center align-items-center " >
+        <div class="w-75 bg-white p-4 rounded">
             <div class="modal-dialog" role="document">
                 <div class="modal-content d-flex flex-column gap-3">
                     <div class="modal-header d-flex gap-3 pb-3 border-bottom">
-                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" v-model="titulo">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
+                        <h4>Titulo</h4>
+                        <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Titulo de la tarea" v-model="titulo">
+                        <button type="button" class="close btn btn-secondary" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body d-flex w-100 gap-3">
                         <div class="d-flex flex-column gap-3 w-100">
-                            <div class="custom-height p-3 d-flex flex-column">
+                            <div class="custom-height p-3 d-flex flex-column rounded">
                                 <h4>Descripcion</h4>
                                 <textarea v-model="descripcion"></textarea>
                             </div>
-                            <div class="custom-height p-3 d-flex flex-column">
+                            <div class="custom-height p-3 d-flex flex-column rounded">
                                 <h4>Comentarios</h4>
                                 <div class="d-flex flex-column scroll">
                                     <div class="d-flex gap-3" v-for="comentario in comentarios">
-                                        <span>{{ comentario.user.name }}</span>
+                                        <span>{{ comentario.user.name }}:</span>
                                         <p>{{ comentario.comentario }}</p>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex gap-3">
-                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Example input" v-model="comentario">
+                                <h4>Comentario</h4>
+                                <input type="text" class="form-control" id="formGroupExampleInput" placeholder="Ingresa tu comentario" v-model="comentario">
                                 <button type="button" class="btn btn-primary" @click="saveComentario">Comentar</button>
                             </div>
                         </div>
                         <div class="d-flex flex-column gap-3">
                             <div class="d-flex flex-column ">
-                                <h3>Responsable</h3>
+                                <h5>Responsable</h5>
                                 <select class="form-select"  v-model="responsable">
                                     <option :value="user.id" v-for="user in users" :selected="user.id === tarjeta?.user?.id">{{user.name}}</option>
                                   </select>
                             </div>
                             <div class="d-flex flex-column ">
-                                <h3>Estado</h3>
+                                <h5>Estado</h5>
                                 <select class="form-select" v-model="estado">
                                     <option :value="estado.id" v-for="estado in estados" :selected="estado.id === tarjeta?.estado?.id">{{ estado.nombre }}</option>
                                   </select>
                             </div>
                             <div class="form-group">
-                                <label for="formGroupExampleInput2">Fecha inicio</label>
+                                <h5>Fecha inicio</h5>
                                 <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de inicio" v-model="fechaInicio">
                             </div>
                             <div class="form-group">
-                                <label for="formGroupExampleInput2">Fecha fin</label>
+                                <h5>Fecha fin</h5>
                                 <input type="date" class="form-control" id="formGroupExampleInput2" placeholder="Fecha de fin" v-model="fechaFin">
                             </div>
                             <div class="form-group">
-                                <span>{{calcularFechas() }}</span>
+                                <span class="font-weight-bold">{{calcularFechas() }}</span>
+                            </div>
+                            <div class="form-group">
+                                <a class="font-weight-bold btn btn-link" :href="`/storage/${tarjeta.archivo}`" target="_blank">{{tarjeta.archivo }}</a>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-primary" @click="editTarjeta">Guardar</button>
+                        <button type="button" class="btn btn-primary" @click="editTarjeta" :disabled="validarCampos()">Guardar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Cerrar</button>
                     </div>
                 </div>
@@ -154,7 +159,9 @@ export default {
                     titulo: this.titulo,
                     descripcion: this.descripcion,
                     id_estado: this.estado,
-                    id_usuario: this.responsable
+                    id_usuario: this.responsable,
+                    fecha_inicio: this.fechaInicio,
+                    fecha_fin: this.fechaFin,
                 })
                 this.handleClose(false, this.tarjetaId, true)
             } catch (error) {
@@ -169,13 +176,20 @@ export default {
             if(this.fechaFin) {
                 const diffTime = Math.abs(fechaFin - fecha);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                return `Termino hace ${diffDays - 1} dias`
+                return `Termino hace ${diffDays} dias`
             }else if(this.fechaInicio){
                 const diffTime = Math.abs(fecha - fechaInicio);
                 const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                 return `Empezará en ${diffDays} dias`
             }
             return ''
+        },
+
+        validarCampos() {
+            if(!this.titulo || !this.descripcion || !this.responsable || !this.estado){
+                return true
+            }
+            return false
         }
     }
 }

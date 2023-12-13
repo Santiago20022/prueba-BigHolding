@@ -1,7 +1,8 @@
 <template>
-    <div class="d-flex flex-column gap-3 p-3">
-        <div class="d-flex w-100 justify-content-end">
+    <div class="d-flex flex-column gap-3 p-5">
+        <div class="d-flex w-100 justify-content-end gap-3">
             <button class="btn btn-primary" @click="descargarReporte">Descargar reporte</button>
+            <a class="btn btn-outline-secondary" href="/">volver al tablero</a>
         </div>
         <table class="table" id="reporte">
             <thead class="table-light">
@@ -16,6 +17,9 @@
                 </tr>
             </thead>
             <tbody>
+                <tr v-if="!tarjetas.length">
+                    <td colspan="7">No hay registros creados aun</td>
+                </tr>
                 <tr v-for="tarjeta in tarjetas">
                     <th>{{ tarjeta.id }}</th>
                     <th>{{ tarjeta.titulo }}</th>

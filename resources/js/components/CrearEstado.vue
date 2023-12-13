@@ -1,28 +1,28 @@
 <template>
     <div class="custom-modal d-flex justify-content-center align-items-center" >
-        <div class="w-50 bg-white p-3">
+        <div class="w-50 bg-white p-4  rounded">
             <div class="modal-dialog" role="document">
                 <div class="modal-content d-flex flex-column gap-3">
                     <div class="modal-header">
                         <h5 class="modal-title">Crear estado</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
+                        <button type="button" class="close btn btn-secondary" data-dismiss="modal" aria-label="Close" @click="handleClose(false)">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <section>
                             <div class="form-group">
-                                <label for="formGroupExampleInput">Nombre</label>
+                                <label for="formGroupExampleInput">Nombre *</label>
                                 <input type="text" class="form-control" id="formGroupExampleInput" placeholder="In Progress" v-model="nombre">
                             </div>
                             <div class="form-group">
-                                <label for="formGroupExampleInput2">Descripcion</label>
+                                <label for="formGroupExampleInput2">Descripcion *</label>
                                 <input type="text" class="form-control" id="formGroupExampleInput2" placeholder="Descripcion" v-model="descripcion">
                             </div>
                         </section>
                     </div>
                     <div class="modal-footer d-flex justify-content-end gap-3">
-                        <button type="button" class="btn btn-primary" @click="saveEstado">Guardar</button>
+                        <button type="button" class="btn btn-primary" @click="saveEstado" :disabled="validarCampos()">Guardar</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="handleClose(false)">Cerrar</button>
                     </div>
                 </div>
@@ -53,6 +53,13 @@ export default {
                 console.log(error);
             }
         },
+
+        validarCampos() {
+            if (!this.nombre || !this.descripcion ) {
+                return true
+            }
+            return false
+        }
     }
 }
 

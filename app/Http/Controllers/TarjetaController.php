@@ -21,12 +21,17 @@ class TarjetaController extends Controller
         $tarjeta->id_usuario = $request->id_usuario;
         $tarjeta->fecha_inicio = $request->fecha_inicio;
         $tarjeta->fecha_fin = $request->fecha_fin;
+        if($request->file()){
+            $file_name = $request->file->getClientOriginalName();
+            $file = $request->file('file');
+            $file_path = $file->store('public');
+            $tarjeta->archivo = $file->hashName();
+        }
         $tarjeta->save();
         return $tarjeta;
     }
 
     public function getAll(string $id){
-        //dd($id);
         $tarjetas = Tarjeta::with(['user', 'estado'])->where('id_estado', '=', $id)->get(); 
         return $tarjetas;
     }
@@ -52,6 +57,14 @@ class TarjetaController extends Controller
     public function getAllCards() {
         $tarjetas = Tarjeta::with(['user', 'estado'])->get(); 
         return $tarjetas;
+    }
+
+    public function destroy(string $id)
+    {
+        $tarjeta = Tarjeta::find($id);
+        $tarjeta->delete();
+
+        return true;
     }
 
 }

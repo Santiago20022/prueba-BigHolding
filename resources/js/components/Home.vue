@@ -1,14 +1,13 @@
 <template>
-    <div class="p-3 d-flex flex-column flex-1 h-100 gap-3">
-        <section class="d-flex justify-content-between">
-            <h1>TARKTASK</h1>
+    <div class="p-3 d-flex flex-column h-100 gap-3">
+        <section class="d-flex justify-content-end">
             <div class="d-flex gap-3">
-                <button @click="handleCrearEstadoModal(true)">Crear estado</button>
-                <button @click="handleCrearTarjetaModal(true)">Crear tarjeta</button>
-                <a href="/reporte">ir a reporte</a>
+                <button @click="handleCrearEstadoModal(true)" class="btn btn-primary">Crear estado</button>
+                <button @click="handleCrearTarjetaModal(true)" class="btn btn-dark">Crear tarjeta</button>
+                <a href="/reporte" class="btn btn-outline-primary">Reporte de Tareas</a>
             </div>
         </section>
-        <section class="h-100 border border-primary scroll p-3 d-flex flex-nowrap mw-100 gap-3">
+        <section class="border border-dark p-3 d-flex mw-100 gap-3 rounded scroll  flex-1">
             <template v-for="estado in estados">
                 <estado :handleModal="handleDetalleTarjetaModal" :estado="estado" :getTarjetas="getTarjetas" :trigger="trigger" :setTrigger="setTrigger"></estado>
             </template>
@@ -99,5 +98,15 @@ export default {
     }
     .scroll{
         overflow-x: auto;
+    }
+
+    .overflow{
+        align-items: stretch;
+        flex: 1 1 auto;
+        max-height: 100%;
+    }
+
+    .custom-flex{
+        flex-grow: 1;
     }
 </style>
